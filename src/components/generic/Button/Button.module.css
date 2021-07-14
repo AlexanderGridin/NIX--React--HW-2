@@ -1,0 +1,21 @@
+.button {
+  background: none;
+  border: none;
+  padding: 7px 25px;
+  box-shadow: none;
+  font-size: 16px;
+  transition: 0.4s;
+  font-family: Montserrat, Arial, sans-serif;
+}
+
+.primary {
+  background-color: #17a05d;
+  border: 2px solid #17a05d;
+  color: #fff;
+  cursor: pointer;
+}
+
+.primary:hover {
+  background-color: #fff;
+  color: #17a05d;
+}

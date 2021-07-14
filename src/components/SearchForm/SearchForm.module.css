@@ -1,0 +1,16 @@
+.form {
+  align-items: flex-start;
+  display: flex;
+}
+
+.formItem {
+  margin: 7px;
+}
+
+.formItem:first-child {
+  width: 100%;
+}
+
+.formItem:last-child {
+  flex-shrink: 0;
+}

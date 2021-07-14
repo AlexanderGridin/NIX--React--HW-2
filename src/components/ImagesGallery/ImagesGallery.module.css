@@ -1,0 +1,56 @@
+.gallery {
+  padding: 15px;
+  border: 5px solid #ddd;
+  min-height: 400px;
+  margin: 15px 0;
+}
+
+.gallery.noImages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallery.withImages {
+  border: 5px solid #17a05d;
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.listItem {
+  border: 5px solid #ddd;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 150px;
+  width: 100%;
+  background-color: #efefef;
+  transition: 0.4s;
+  overflow: hidden;
+}
+
+.listItem:hover,
+.listItem.active {
+  border: 5px solid #17a05d;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+  transition: 0.4s;
+}
+
+.listItem:hover .image {
+  transform: rotate(-5deg) scale(1.3);
+}
