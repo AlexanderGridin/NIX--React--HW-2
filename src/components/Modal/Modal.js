@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import styles from "./Modal.module.css";
 
 export default class Modal extends React.Component {
@@ -25,7 +27,7 @@ export default class Modal extends React.Component {
   }
 
   render() {
-    const {handleModalClosing, handleContentLoading} = this;
+    const { handleModalClosing, handleContentLoading } = this;
     const { contentBackgroundImageUrl, children } = this.props;
     const { isContentLoaded } = this.state;
 
@@ -54,25 +56,47 @@ export default class Modal extends React.Component {
   }
 }
 
+Modal.propTypes = {
+  contentBackgroundImageUrl: PropTypes.string,
+  onClose: PropTypes.func
+};
+
 function ModalWrapper({ className, children }) {
   return <div className={className}>{children}</div>;
 }
+
+ModalWrapper.propTypes = {
+  className: PropTypes.string
+};
 
 function ModalClosingBackground({ className, onClick }) {
   return <div className={className} onClick={onClick}></div>;
 }
 
+ModalClosingBackground.propTypes = {
+  className: PropTypes.string
+};
+
 function ModalInner({ className, children }) {
   return <div className={className}>{children}</div>;
 }
 
+ModalInner.propTypes = {
+  className: PropTypes.string
+};
+
 function ModalCloseButton({ className, onClick }) {
   return (
-    <button className={className} onClick={onClick}>
+    <button className={className} onClick={onClick} type="button">
       &times;
     </button>
   );
 }
+
+Modal.ModalCloseButton = {
+  className: PropTypes.string,
+  onClick: PropTypes.func
+};
 
 function ModalContent({ className, backgroundImage, children, onLoad }) {
   return (
@@ -85,3 +109,9 @@ function ModalContent({ className, backgroundImage, children, onLoad }) {
     </div>
   );
 }
+
+ModalContent.propTypes = {
+  className: PropTypes.string,
+  backgroundImage: PropTypes.string,
+  onLoad: PropTypes.func
+};

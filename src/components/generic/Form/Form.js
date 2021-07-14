@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 export default function Form({
   className,
   action,
@@ -16,3 +18,10 @@ export default function Form({
     </form>
   );
 }
+
+Form.propTypes = {
+  className: PropTypes.string,
+  action: PropTypes.string,
+  method: PropTypes.string,
+  onSubmit: PropTypes.func
+};

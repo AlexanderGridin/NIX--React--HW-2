@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import styles from "./SearchForm.module.css";
 
 import Form from "../generic/Form/Form";
@@ -24,6 +25,15 @@ export default function SearchForm({ inputLastValue, onSubmit }) {
   );
 }
 
+SearchForm.propTypes = {
+  inputLastValue: PropTypes.string,
+  onSubmit: PropTypes.func
+};
+
 function FormItem({ className, children }) {
   return <div className={className}>{children}</div>;
 }
+
+FormItem.propTypes = {
+  className: PropTypes.string
+};

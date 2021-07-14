@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import styles from "./ImagesGallery.module.css";
 
 export default function ImagesGallery({
@@ -33,6 +34,12 @@ export default function ImagesGallery({
   );
 }
 
+ImagesGallery.propTypes = {
+  images: PropTypes.array,
+  activeItemIndex: PropTypes.number,
+  handleItemClick: PropTypes.func
+};
+
 function ImagesGalleryList({ children }) {
   return <ul className={styles.list}>{children}</ul>;
 }
@@ -57,6 +64,17 @@ function ImagesGalleryItem({
   );
 }
 
+ImagesGalleryItem.propTypes = {
+  activeItemIndex: PropTypes.number,
+  currentItemIndex: PropTypes.number,
+  handleClick: PropTypes.func
+};
+
 function ImagesGalleryImage({ src, alt }) {
   return <img className={styles.image} src={src} alt={alt} />;
 }
+
+ImagesGalleryImage.propTypes = {
+  src: PropTypes.string,
+  alt: PropTypes.string
+};
