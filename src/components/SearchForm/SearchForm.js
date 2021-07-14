@@ -6,9 +6,11 @@ import Input from "../generic/Input/Input";
 import Button from "../generic/Button/Button";
 
 export default function SearchForm({ inputLastValue, onSubmit }) {
+  const { form, formItem } = styles;
+
   return (
-    <Form className={styles.form} action="#" method="POST" onSubmit={onSubmit}>
-      <FormItem className={styles.formItem}>
+    <Form className={form} action="#" method="POST" onSubmit={onSubmit}>
+      <FormItem className={formItem}>
         <Input
           placeholder={
             inputLastValue
@@ -18,7 +20,7 @@ export default function SearchForm({ inputLastValue, onSubmit }) {
           description="Accepted values: backgrounds, fashion, nature, science, education, feelings, health, people, religion, places, animals, industry, computer, food, sports, transportation, travel, buildings, business, music"
         />
       </FormItem>
-      <FormItem className={styles.formItem}>
+      <FormItem className={formItem}>
         <Button type="submit" typeClassName="primary" text="Find images" />
       </FormItem>
     </Form>

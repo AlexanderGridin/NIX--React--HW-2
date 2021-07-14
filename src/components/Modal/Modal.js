@@ -30,20 +30,18 @@ export default class Modal extends React.Component {
     const { handleModalClosing, handleContentLoading } = this;
     const { contentBackgroundImageUrl, children } = this.props;
     const { isContentLoaded } = this.state;
+    const { wrapper, background, inner, close, content } = styles;
 
     return (
-      <ModalWrapper className={styles.wrapper}>
+      <ModalWrapper className={wrapper}>
         <ModalClosingBackground
-          className={styles.background}
+          className={background}
           onClick={handleModalClosing}
         />
-        <ModalInner className={styles.inner}>
-          <ModalCloseButton
-            className={styles.close}
-            onClick={handleModalClosing}
-          />
+        <ModalInner className={inner}>
+          <ModalCloseButton className={close} onClick={handleModalClosing} />
           <ModalContent
-            className={styles.content}
+            className={content}
             onLoad={handleContentLoading}
             backgroundImage={contentBackgroundImageUrl}
           >

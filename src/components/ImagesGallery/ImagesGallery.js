@@ -6,12 +6,10 @@ export default function ImagesGallery({
   activeItemIndex,
   handleItemClick
 }) {
+  const { gallery, withImages, noImages } = styles;
+
   return (
-    <div
-      className={`${styles.gallery} ${
-        images ? styles.withImages : styles.noImages
-      }`}
-    >
+    <div className={`${gallery} ${images ? withImages : noImages}`}>
       {images ? (
         <ImagesGalleryList>
           {images.map((image, index) => {

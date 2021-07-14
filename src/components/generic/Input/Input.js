@@ -2,18 +2,19 @@ import PropTypes from "prop-types";
 import styles from "./Input.module.css";
 
 export default function Input(props) {
-  let { id, type, name, placeholder, description } = props;
+  const { id, type, name, placeholder, description } = props;
+  const { textInput, description: descriptionClassName } = styles;
 
   return (
     <>
       <input
-        className={styles.textInput}
+        className={textInput}
         name={name}
         id={id}
         type={type}
         placeholder={placeholder}
       />
-      {description && <div className={styles.description}>{description}</div>}
+      {description && <div className={descriptionClassName}>{description}</div>}
     </>
   );
 }
