@@ -2,12 +2,12 @@ import PropTypes from "prop-types";
 import styles from "./Button.module.css";
 
 export default function Button(props) {
-  const { typeClassName, type, text, onClick } = props;
+  const { modificationClassName, type, text, onClick } = props;
   const { button } = styles;
 
   return (
     <button
-      className={`${button} ${styles[typeClassName]}`}
+      className={`${button} ${styles[modificationClassName]}`}
       type={type}
       onClick={onClick}
     >

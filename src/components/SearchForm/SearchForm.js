@@ -21,7 +21,11 @@ export default function SearchForm({ inputLastValue, onSubmit }) {
         />
       </FormItem>
       <FormItem className={formItem}>
-        <Button type="submit" typeClassName="primary" text="Find images" />
+        <Button
+          type="submit"
+          modificationClassName="primary"
+          text="Find images"
+        />
       </FormItem>
     </Form>
   );
