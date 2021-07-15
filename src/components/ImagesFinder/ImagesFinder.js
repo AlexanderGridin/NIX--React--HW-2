@@ -1,7 +1,9 @@
 import React from "react";
 
 import getJSONDataFromApi from "../../lib/getJSONDataFromApi";
-import isValidImagesCategory from "../../lib/isValidImagesCategory";
+import imagesCategoryValidator from "../../lib/imagesCategoryValidator";
+import PixabayApi from "../../lib/PixabayApi";
+import messages from "../../lib/messages";
 
 import SearchForm from "../SearchForm/SearchForm";
 import ImagesGallery from "../ImagesGallery/ImagesGallery";
@@ -12,12 +14,9 @@ export default class ImagesFinder extends React.Component {
   constructor(props) {
     super(props);
 
-    this.imagesApiUrl = "https://pixabay.com/api/";
-    this.imagesApiKey = "22470526-412f3aeb0ddde7d412a24acdb";
-
-    this.NO_IMAGES_MESSAGE = "No images to display...";
-    this.EMPTY_INPUT_MESSAGE = "Please, type category for search...";
-    this.INVALID_INPUT_VALUE = "Please, type valid category...";
+    this.IMAGES_FINDER_SEARCH_INPUT_LAST_VALUE =
+      "imagesFinderSearchInputLastValue";
+    this.IMAGES_PER_PAGE = 24;
 
     this.state = {
       categoryForSearch: null,
@@ -31,6 +30,13 @@ export default class ImagesFinder extends React.Component {
     };
 
     this.handleSearchFormSubmit = this.handleSearchFormSubmit.bind(this);
+    this.handleSearchFormInputSuccessValidation = this.handleSearchFormInputSuccessValidation.bind(
+      this
+    );
+    this.handleSearchFormInputValidationFailure = this.handleSearchFormInputValidationFailure.bind(
+      this
+    );
+
     this.handleImagesGalleryItemClick = this.handleImagesGalleryItemClick.bind(
       this
     );
@@ -40,38 +46,40 @@ export default class ImagesFinder extends React.Component {
   handleSearchFormSubmit(e) {
     e.preventDefault();
 
+    const {
+      handleSearchFormInputSuccessValidation,
+      handleSearchFormInputValidationFailure
+    } = this;
     const searchForm = e.target;
     const [searchInput] = searchForm.elements;
     const categoryForSearch = searchInput.value.trim().toLowerCase();
-    const requestUrl = `${this.imagesApiUrl}?key=${this.imagesApiKey}&category=${categoryForSearch}`;
 
-    if (!categoryForSearch) {
-      searchForm.reset();
-      this.setState({
-        apiImages: null,
-        noImagesMessage: this.EMPTY_INPUT_MESSAGE,
-        categoryForSearch: null
+    imagesCategoryValidator
+      .validate(categoryForSearch)
+      .success(() => {
+        handleSearchFormInputSuccessValidation(categoryForSearch);
+      })
+      .fail(() => {
+        handleSearchFormInputValidationFailure(searchForm);
       });
-      localStorage.removeItem("imagesFinderSearchInputLastValue");
+  }
 
-      return;
-    }
+  handleSearchFormInputSuccessValidation(categoryForSearch) {
+    const { IMAGES_FINDER_SEARCH_INPUT_LAST_VALUE, IMAGES_PER_PAGE } = this;
+    const requestUrl = new PixabayApi()
+      .createRequestUrl()
+      .addGetParameter("category", categoryForSearch)
+      .addGetParameter("per_page", IMAGES_PER_PAGE)
+      .getRequestUrl();
 
-    if (!isValidImagesCategory(categoryForSearch)) {
-      searchForm.reset();
-      this.setState({
-        apiImages: null,
-        noImagesMessage: this.INVALID_INPUT_VALUE,
-        categoryForSearch: null
-      });
-      localStorage.removeItem("imagesFinderSearchInputLastValue");
-
-      return;
-    }
-    localStorage.setItem("imagesFinderSearchInputLastValue", categoryForSearch);
+    localStorage.setItem(
+      IMAGES_FINDER_SEARCH_INPUT_LAST_VALUE,
+      categoryForSearch
+    );
 
     this.setState({
-      categoryForSearch
+      categoryForSearch,
+      searchInputLastValue: categoryForSearch
     });
 
     getJSONDataFromApi(requestUrl).then((data) => {
@@ -79,6 +87,15 @@ export default class ImagesFinder extends React.Component {
         apiTotalAccessibleImages: data.totalHits,
         apiImages: data.hits
       });
+    });
+  }
+
+  handleSearchFormInputValidationFailure(searchForm) {
+    searchForm.reset();
+    this.setState({
+      apiImages: null,
+      noImagesMessage: messages.ImagesFinder.INVALID_SEARCH_FORM_INPUT_VALUE,
+      categoryForSearch: null
     });
   }
 
@@ -101,11 +118,15 @@ export default class ImagesFinder extends React.Component {
   }
 
   componentDidMount() {
+    const { IMAGES_FINDER_SEARCH_INPUT_LAST_VALUE, IMAGES_PER_PAGE } = this;
     const searchInputLastValue = localStorage.getItem(
-      "imagesFinderSearchInputLastValue"
+      IMAGES_FINDER_SEARCH_INPUT_LAST_VALUE
     );
-    const { imagesApiUrl, imagesApiKey } = this;
-    const requestUrl = `${imagesApiUrl}?key=${imagesApiKey}&category=${searchInputLastValue}`;
+    const requestUrl = new PixabayApi()
+      .createRequestUrl()
+      .addGetParameter("category", searchInputLastValue)
+      .addGetParameter("per_page", IMAGES_PER_PAGE)
+      .getRequestUrl();
 
     if (!searchInputLastValue) {
       return;
