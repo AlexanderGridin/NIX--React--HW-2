@@ -4,7 +4,8 @@ import styles from "./ImagesGallery.module.css";
 export default function ImagesGallery({
   images,
   activeItemIndex,
-  handleItemClick
+  handleItemClick,
+  noImagesMessage
 }) {
   const { gallery, withImages, noImages } = styles;
 
@@ -26,7 +27,7 @@ export default function ImagesGallery({
           })}
         </ImagesGalleryList>
       ) : (
-        "No images to display..."
+        noImagesMessage
       )}
     </div>
   );

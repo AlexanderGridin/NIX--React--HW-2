@@ -1,5 +1,7 @@
 import React from "react";
+
 import getJSONDataFromApi from "../../lib/getJSONDataFromApi";
+import isValidImagesCategory from "../../lib/isValidImagesCategory";
 
 import SearchForm from "../SearchForm/SearchForm";
 import ImagesGallery from "../ImagesGallery/ImagesGallery";
@@ -12,6 +14,10 @@ export default class ImagesFinder extends React.Component {
 
     this.imagesApiUrl = "https://pixabay.com/api/";
     this.imagesApiKey = "22470526-412f3aeb0ddde7d412a24acdb";
+
+    this.NO_IMAGES_MESSAGE = "No images to display...";
+    this.EMPTY_INPUT_MESSAGE = "Please, type category for search...";
+    this.INVALID_INPUT_VALUE = "Please, type valid category...";
 
     this.state = {
       categoryForSearch: null,
@@ -34,10 +40,34 @@ export default class ImagesFinder extends React.Component {
   handleSearchFormSubmit(e) {
     e.preventDefault();
 
-    const [searchInput] = e.target.elements;
-    const categoryForSearch = searchInput.value;
+    const searchForm = e.target;
+    const [searchInput] = searchForm.elements;
+    const categoryForSearch = searchInput.value.trim().toLowerCase();
     const requestUrl = `${this.imagesApiUrl}?key=${this.imagesApiKey}&category=${categoryForSearch}`;
 
+    if (!categoryForSearch) {
+      searchForm.reset();
+      this.setState({
+        apiImages: null,
+        noImagesMessage: this.EMPTY_INPUT_MESSAGE,
+        categoryForSearch: null
+      });
+      localStorage.removeItem("imagesFinderSearchInputLastValue");
+
+      return;
+    }
+
+    if (!isValidImagesCategory(categoryForSearch)) {
+      searchForm.reset();
+      this.setState({
+        apiImages: null,
+        noImagesMessage: this.INVALID_INPUT_VALUE,
+        categoryForSearch: null
+      });
+      localStorage.removeItem("imagesFinderSearchInputLastValue");
+
+      return;
+    }
     localStorage.setItem("imagesFinderSearchInputLastValue", categoryForSearch);
 
     this.setState({
@@ -103,7 +133,8 @@ export default class ImagesFinder extends React.Component {
       isRenderModal,
       apiImages,
       activeGalleryItemIndex,
-      searchInputLastValue
+      searchInputLastValue,
+      noImagesMessage
     } = this.state;
 
     return (
@@ -116,6 +147,7 @@ export default class ImagesFinder extends React.Component {
           images={this.state.apiImages}
           activeItemIndex={activeGalleryItemIndex}
           handleItemClick={handleImagesGalleryItemClick}
+          noImagesMessage={noImagesMessage}
         />
         {isRenderModal && (
           <Modal
