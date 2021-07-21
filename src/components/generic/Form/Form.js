@@ -5,10 +5,12 @@ export default function Form({
   action,
   method,
   onSubmit,
-  children
+  children,
+  elementReference
 }) {
   return (
     <form
+      ref={elementReference}
       className={className}
       action={action}
       method={method}

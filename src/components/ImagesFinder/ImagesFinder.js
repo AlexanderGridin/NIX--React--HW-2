@@ -18,6 +18,9 @@ export default class ImagesFinder extends React.Component {
       "imagesFinderSearchInputLastValue";
     this.IMAGES_PER_PAGE = 24;
 
+    this.searchFormRef = React.createRef();
+    this.searchFormInputRef = React.createRef();
+
     this.state = {
       categoryForSearch: null,
       searchInputLastValue: null,
@@ -48,11 +51,14 @@ export default class ImagesFinder extends React.Component {
 
     const {
       handleSearchFormInputSuccessValidation,
-      handleSearchFormInputValidationFailure
+      handleSearchFormInputValidationFailure,
+      searchFormRef,
+      searchFormInputRef
     } = this;
-    const searchForm = e.target;
-    const [searchInput] = searchForm.elements;
-    const categoryForSearch = searchInput.value.trim().toLowerCase();
+
+    const searchForm = searchFormRef.current;
+    const searchFormInput = searchFormInputRef.current;
+    const categoryForSearch = searchFormInput.value.trim().toLowerCase();
 
     imagesCategoryValidator
       .validate(categoryForSearch)
@@ -148,7 +154,9 @@ export default class ImagesFinder extends React.Component {
     const {
       handleSearchFormSubmit,
       handleImagesGalleryItemClick,
-      handleModalClose
+      handleModalClose,
+      searchFormRef,
+      searchFormInputRef
     } = this;
     const {
       isRenderModal,
@@ -163,6 +171,8 @@ export default class ImagesFinder extends React.Component {
         <SearchForm
           inputLastValue={searchInputLastValue}
           onSubmit={handleSearchFormSubmit}
+          formReference={searchFormRef}
+          inputReference={searchFormInputRef}
         />
         <ImagesGallery
           images={this.state.apiImages}
@@ -170,7 +180,7 @@ export default class ImagesFinder extends React.Component {
           handleItemClick={handleImagesGalleryItemClick}
           noImagesMessage={noImagesMessage}
         />
-        {isRenderModal && (
+        {activeGalleryItemIndex !== null && (
           <Modal
             onClose={handleModalClose}
             contentBackgroundImageUrl={

@@ -5,13 +5,25 @@ import Form from "../generic/Form/Form";
 import Input from "../generic/Input/Input";
 import Button from "../generic/Button/Button";
 
-export default function SearchForm({ inputLastValue, onSubmit }) {
+export default function SearchForm({
+  inputLastValue,
+  formReference,
+  inputReference,
+  onSubmit
+}) {
   const { form, formItem } = styles;
 
   return (
-    <Form className={form} action="#" method="POST" onSubmit={onSubmit}>
+    <Form
+      className={form}
+      action="#"
+      method="POST"
+      onSubmit={onSubmit}
+      elementReference={formReference}
+    >
       <FormItem className={formItem}>
         <Input
+          elementReference={inputReference}
           placeholder={
             inputLastValue
               ? `Last searched category: ${inputLastValue}`
