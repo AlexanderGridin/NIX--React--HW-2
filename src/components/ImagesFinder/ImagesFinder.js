@@ -132,10 +132,8 @@ export default class ImagesFinder extends React.Component {
   }
 
   handleImagesGalleryItemClick(selectedGalleryItemIndex) {
-    this.setState((state) => {
-      return {
-        activeGalleryItemIndex: selectedGalleryItemIndex
-      };
+    this.setState({
+      activeGalleryItemIndex: selectedGalleryItemIndex
     });
   }
 
@@ -154,18 +152,12 @@ export default class ImagesFinder extends React.Component {
       categoryForSearch
     } = this.state;
 
-    const { IMAGES_PER_PAGE } = imagesFinderConstants;
-    const { PAGINATION_OFFSET } = imagesFinderConstants.pagination;
-
-    const {
-      IMAGES_FINDER_PAGINATION_CURRENT_PAGE,
-      IMAGES_FINDER_PAGINATION_TOTAL_PAGES
-    } = imagesFinderConstants.localStorage.variablesNames;
-
     if (paginationCurrentPage === paginationTotalPages) {
       return;
     }
 
+    const { IMAGES_PER_PAGE } = imagesFinderConstants;
+    const { PAGINATION_OFFSET } = imagesFinderConstants.pagination;
     const requestUrl = new PixabayApi()
       .createRequestUrl()
       .addGetParameter("category", categoryForSearch)
@@ -178,6 +170,10 @@ export default class ImagesFinder extends React.Component {
 
     getJSONDataFromApi(requestUrl).then((data) => {
       const totalPages = Math.ceil(data.totalHits / IMAGES_PER_PAGE);
+      const {
+        IMAGES_FINDER_PAGINATION_CURRENT_PAGE,
+        IMAGES_FINDER_PAGINATION_TOTAL_PAGES
+      } = imagesFinderConstants.localStorage.variablesNames;
 
       localStorage.setItem(IMAGES_FINDER_PAGINATION_TOTAL_PAGES, totalPages);
       localStorage.setItem(
@@ -197,17 +193,11 @@ export default class ImagesFinder extends React.Component {
 
   handlePaginationPrev() {
     const { paginationCurrentPage, categoryForSearch } = this.state;
-
     const { IMAGES_PER_PAGE } = imagesFinderConstants;
     const {
       PAGINATION_OFFSET,
       PAGINTAION_FIRST_PAGE
     } = imagesFinderConstants.pagination;
-
-    const {
-      IMAGES_FINDER_PAGINATION_CURRENT_PAGE,
-      IMAGES_FINDER_PAGINATION_TOTAL_PAGES
-    } = imagesFinderConstants.localStorage.variablesNames;
 
     if (
       paginationCurrentPage === PAGINTAION_FIRST_PAGE ||
@@ -228,6 +218,10 @@ export default class ImagesFinder extends React.Component {
 
     getJSONDataFromApi(requestUrl).then((data) => {
       const totalPages = Math.ceil(data.totalHits / IMAGES_PER_PAGE);
+      const {
+        IMAGES_FINDER_PAGINATION_CURRENT_PAGE,
+        IMAGES_FINDER_PAGINATION_TOTAL_PAGES
+      } = imagesFinderConstants.localStorage.variablesNames;
 
       localStorage.setItem(IMAGES_FINDER_PAGINATION_TOTAL_PAGES, totalPages);
       localStorage.setItem(
@@ -246,8 +240,6 @@ export default class ImagesFinder extends React.Component {
   }
 
   componentDidMount() {
-    const { IMAGES_PER_PAGE } = imagesFinderConstants;
-
     const {
       IMAGES_FINDER_SEARCH_INPUT_LAST_VALUE,
       IMAGES_FINDER_PAGINATION_CURRENT_PAGE,
@@ -257,6 +249,12 @@ export default class ImagesFinder extends React.Component {
     const searchInputLastValue = localStorage.getItem(
       IMAGES_FINDER_SEARCH_INPUT_LAST_VALUE
     );
+
+    if (!searchInputLastValue) {
+      return;
+    }
+
+    const { IMAGES_PER_PAGE } = imagesFinderConstants;
 
     const paginationTotalPages = +localStorage.getItem(
       IMAGES_FINDER_PAGINATION_TOTAL_PAGES
@@ -272,10 +270,6 @@ export default class ImagesFinder extends React.Component {
       .addGetParameter("per_page", IMAGES_PER_PAGE)
       .addGetParameter("page", paginationCurrentPage)
       .getRequestUrl();
-
-    if (!searchInputLastValue) {
-      return;
-    }
 
     getJSONDataFromApi(requestUrl).then((data) => {
       this.setState({
