@@ -1,7 +1,10 @@
 const imagesFinderConstants = {
   IMAGES_PER_PAGE: 18,
-  PAGINTAION_FIRST_PAGE: 1,
-  PAGINATION_OFFSET: 1,
+
+  pagination: {
+    PAGINTAION_FIRST_PAGE: 1,
+    PAGINATION_OFFSET: 1
+  },
 
   localStorage: {
     variablesNames: {
