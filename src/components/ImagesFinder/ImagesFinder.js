@@ -75,7 +75,6 @@ export default class ImagesFinder extends React.Component {
   handleSearchFormInputSuccessValidation(categoryForSearch) {
     const { IMAGES_PER_PAGE } = imagesFinderConstants;
     const { PAGINTAION_FIRST_PAGE } = imagesFinderConstants.pagination;
-
     const {
       IMAGES_FINDER_SEARCH_INPUT_LAST_VALUE,
       IMAGES_FINDER_PAGINATION_CURRENT_PAGE,
@@ -122,6 +121,7 @@ export default class ImagesFinder extends React.Component {
     const { INVALID_SEARCH_FORM_INPUT_VALUE } = imagesFinderConstants.messages;
 
     searchForm.reset();
+
     this.setState({
       apiImages: null,
       noImagesMessage: INVALID_SEARCH_FORM_INPUT_VALUE,
@@ -138,10 +138,8 @@ export default class ImagesFinder extends React.Component {
   }
 
   handleModalClose() {
-    this.setState((state) => {
-      return {
-        activeGalleryItemIndex: null
-      };
+    this.setState({
+      activeGalleryItemIndex: null
     });
   }
 
@@ -193,7 +191,6 @@ export default class ImagesFinder extends React.Component {
 
   handlePaginationPrev() {
     const { paginationCurrentPage, categoryForSearch } = this.state;
-    const { IMAGES_PER_PAGE } = imagesFinderConstants;
     const {
       PAGINATION_OFFSET,
       PAGINTAION_FIRST_PAGE
@@ -206,6 +203,7 @@ export default class ImagesFinder extends React.Component {
       return;
     }
 
+    const { IMAGES_PER_PAGE } = imagesFinderConstants;
     const requestUrl = new PixabayApi()
       .createRequestUrl()
       .addGetParameter("category", categoryForSearch)
@@ -255,7 +253,6 @@ export default class ImagesFinder extends React.Component {
     }
 
     const { IMAGES_PER_PAGE } = imagesFinderConstants;
-
     const paginationTotalPages = +localStorage.getItem(
       IMAGES_FINDER_PAGINATION_TOTAL_PAGES
     );
@@ -293,6 +290,7 @@ export default class ImagesFinder extends React.Component {
       searchFormRef,
       searchFormInputRef
     } = this;
+
     const {
       apiImages,
       activeGalleryItemIndex,
